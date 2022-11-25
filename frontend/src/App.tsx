@@ -57,23 +57,19 @@ function App() {
       closeOnMaskClick: true,
       content: (
         <div style={{ padding: 20 }}>
-          <h1 style={{ marginBottom: 10 }}>Scan using ME App</h1>
-          <p>
-            1.Go to “Settings -&gt; Experiments -&gt; Proof of Personhood” and
-            then choose "For Dapps".{' '}
-          </p>
-          <p style={{ marginBottom: 30 }}>2.Click "Continue" button.</p>
+          <h2 style={{ marginBottom: 10 }}>Scan with HumanID App</h2>
           <div
             style={{
               overflow: 'hidden',
               borderRadius: 10,
               cursor: 'pointer',
               fontSize: 0,
-              width: 170,
-              height: 170,
+              margin: '0 auto',
+              width: 200,
+              height: 200,
             }}
           >
-            <QRCodeSVG value={scope} size={170} includeMargin />
+            <QRCodeSVG value={scope} size={200} includeMargin />
           </div>
         </div>
       ),
