@@ -6,7 +6,7 @@ part of 'verifying.dart';
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class Verifying extends HookWidget {
+class Verifying extends StatelessWidget {
   const Verifying({
     Key? key,
     required this.actions,

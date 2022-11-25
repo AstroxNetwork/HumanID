@@ -45,8 +45,7 @@ Widget _verifying(
                   liveDetection: liveDetection,
                   action: actions.removeAt(0).name,
                   onPlatformViewCreated: () {},
-                  auth:
-                      "opkZkOMqNJyYTC41JUIgoCPQ2vsK+IaVrT4FjRLUSHNCJDRa3uq41hAnYtkalGPyGn455dluAsXqjBW0Indl0N/ogUzIAszZJlXLXOkj2EhwJtWSzQl4k/w48lLt+cY3/BEHxKctU/r072Y6rhjP1xLO+to4jmjQLOEJ2GIcE1g=",
+                  auth: '',
                 ),
                 firstChild: Container(
                   color: context.theme.backgroundColor,

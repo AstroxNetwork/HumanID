@@ -46,11 +46,9 @@ Widget _home(BuildContext context) {
           ),
         ),
         spacer,
-        SizedBox(
+        const SizedBox(
           width: double.infinity,
-          child: context.theme.isDark
-              ? Assets.icons.unverifiedDark.svg()
-              : Assets.icons.unverifiedLight.svg(),
+          child: Human(),
         ),
         const SizedBox(
           width: 230.0,
@@ -77,6 +75,36 @@ Widget _home(BuildContext context) {
         Ver(72.0 + Screen.navBarHeight),
       ],
     ),
+  );
+}
+
+@cwidget
+Widget _human(BuildContext context, WidgetRef ref) {
+  final isVerified = ref.watch(isVerifiedProvider);
+
+  Widget verified() {
+    return context.theme.isDark
+        ? Assets.icons.verifiedDark.svg()
+        : Assets.icons.verifiedLight.svg();
+  }
+
+  Widget unverified() {
+    return context.theme.isDark
+        ? Assets.icons.unverifiedDark.svg()
+        : Assets.icons.unverifiedLight.svg();
+  }
+
+  return isVerified.when(
+    data: (v) {
+      return v ? verified() : unverified();
+    },
+    error: (e, s) {
+      return unverified();
+    },
+    loading: () {
+      return unverified();
+    },
+    skipLoadingOnRefresh: false,
   );
 }
 
