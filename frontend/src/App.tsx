@@ -22,6 +22,7 @@ function App() {
     address,
     host: window.location.hostname,
   }
+  console.log(chain)
   const contractAddress =
     chain?.id === 80001
       ? contractsAddress.polygon

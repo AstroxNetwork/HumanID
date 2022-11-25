@@ -1,7 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import '@rainbow-me/rainbowkit/styles.css'
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
+import { RainbowKitProvider, getDefaultWallets, connectorsForWallets,  } from '@rainbow-me/rainbowkit'
+import {
+  metaMaskWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import App from './App'
@@ -10,11 +13,12 @@ import { polygonTestChain, scrollChain } from './contracts/chain'
 
 const chains =
   import.meta.env.MODE === 'development'
-    ? [chain.localhost, scrollChain, polygonTestChain]
+    ? [chain.localhost]
     : [scrollChain, polygonTestChain]
 const { provider, webSocketProvider } = configureChains(chains, [
   jsonRpcProvider({
     rpc: (chain) => {
+      console.log(chain)
       return {
         http:
         chain.rpcUrls.default
@@ -22,10 +26,19 @@ const { provider, webSocketProvider } = configureChains(chains, [
     },
   }),
 ])
-const { connectors } = getDefaultWallets({
-  appName: 'Challenge',
-  chains,
-})
+// const { connectors } = getDefaultWallets({
+//   appName: 'Challenge',
+//   chains,
+// })
+
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [
+      metaMaskWallet({ chains }),
+    ],
+  },
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,
