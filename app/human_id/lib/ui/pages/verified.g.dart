@@ -6,9 +6,16 @@ part of 'verified.dart';
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class Verified extends StatelessWidget {
+class Verified extends ConsumerWidget {
   const Verified({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context) => _verified(_context);
+  Widget build(
+    BuildContext _context,
+    WidgetRef _ref,
+  ) =>
+      _verified(
+        _context,
+        _ref,
+      );
 }

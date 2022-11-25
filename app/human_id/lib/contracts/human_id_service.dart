@@ -26,7 +26,7 @@ class EthNetwork {
     ),
     EthNetwork(
       name: "Mumbai Testnet",
-      rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+      rpcUrl: "https://rpc-mumbai.maticvigil.com",
       chainId: 80001,
     ),
   ];

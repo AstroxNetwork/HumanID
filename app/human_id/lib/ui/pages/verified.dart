@@ -1,10 +1,11 @@
 import 'package:human_id/exports.dart';
+import 'package:human_id/ui/pages/home.dart';
 
 part 'verified.g.dart';
 
-@swidget
+@cwidget
 @FFRoute(name: "/verified")
-Widget _verified(BuildContext context) {
+Widget _verified(BuildContext context, WidgetRef ref) {
   return Scaffold(
     body: Column(
       children: [
@@ -32,6 +33,7 @@ Widget _verified(BuildContext context) {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
+                ref.invalidate(isVerifiedProvider);
                 Navigator.popUntil(context,
                     (route) => route.settings.name == Routes.home.name);
               },
