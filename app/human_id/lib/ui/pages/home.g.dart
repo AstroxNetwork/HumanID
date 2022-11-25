@@ -13,6 +13,20 @@ class Home extends StatelessWidget {
   Widget build(BuildContext _context) => _home(_context);
 }
 
+class Network extends ConsumerWidget {
+  const Network({Key? key}) : super(key: key);
+
+  @override
+  Widget build(
+    BuildContext _context,
+    WidgetRef _ref,
+  ) =>
+      _network(
+        _context,
+        _ref,
+      );
+}
+
 class Human extends ConsumerWidget {
   const Human({Key? key}) : super(key: key);
 

@@ -5,51 +5,103 @@ import 'package:web3dart/web3dart.dart' as web3;
 
 import 'human_id.g.dart';
 
+class EthNetwork {
+  final String name;
+  final String rpcUrl;
+  final int chainId;
+
+  const EthNetwork({
+    required this.name,
+    required this.rpcUrl,
+    required this.chainId,
+  });
+
+  static EthNetwork selected = networks.first;
+
+  static const networks = [
+    EthNetwork(
+      name: "Scroll L2 Testnet",
+      rpcUrl: "https://prealpha.scroll.io/l2",
+      chainId: 534354,
+    ),
+    EthNetwork(
+      name: "Mumbai Testnet",
+      rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+      chainId: 80001,
+    ),
+  ];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EthNetwork &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          rpcUrl == other.rpcUrl &&
+          chainId == other.chainId;
+
+  @override
+  int get hashCode => name.hashCode ^ rpcUrl.hashCode ^ chainId.hashCode;
+}
+
 class HumanIDService {
   final Human_id _humanId;
-  final web3.EthPrivateKey privateKey;
-  static HumanIDService? _service;
+  static final privateKey = web3.EthPrivateKey.fromInt(
+    BigInt.parse(const String.fromEnvironment("pk")),
+  );
 
-  factory HumanIDService() {
-    if (_service == null) {
-      final client = web3.Web3Client("http://192.168.101.4:8545", Client());
-      final humanId = Human_id(
-        client: client,
-        address: web3.EthereumAddress.fromHex(
-            '0x5fbdb2315678afecb367f032d93f642f64180aa3'),
-      );
-      final ethPrivateKey = web3.EthPrivateKey.fromHex(
-          "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a");
-      _service = HumanIDService._(humanId, ethPrivateKey);
-    }
-    return _service!;
+  factory HumanIDService([EthNetwork? network]) {
+    network ??= EthNetwork.selected;
+    final client = web3.Web3Client(network.rpcUrl, Client());
+    final humanId = Human_id(
+      client: client,
+      address:
+          web3.EthereumAddress.fromHex(const String.fromEnvironment("addr")),
+      chainId: network.chainId,
+    );
+    return HumanIDService._(humanId);
   }
 
-  HumanIDService._(this._humanId, this.privateKey);
+  HumanIDService._(this._humanId);
 
   Future<bool> isVerified(String scope) async {
-    final result = await _humanId.get_token(
-      scope,
-      privateKey.address,
-    );
-    final list = (result as List).cast<String>();
-    return list[1].isNotBlank;
+    try {
+      final result = await _humanId.get_token(
+        scope,
+        privateKey.address,
+      );
+      final list = (result as List).cast<String>();
+      return list[1].isNotBlank;
+    } catch (e, s) {
+      e.error(stackTrace: s);
+      rethrow;
+    }
   }
 
   Future<List<LiveAction>> getActions() async {
-    final result = await _humanId.detect_batch_start();
-    final actions = [...LiveAction.values];
-    actions.removeAt(result.toInt());
-    actions.shuffle();
-    return actions;
+    try {
+      final result = await _humanId.detect_batch_start();
+      final actions = [...LiveAction.values];
+      actions.removeAt(result.toInt());
+      actions.shuffle();
+      return actions;
+    } catch (e, s) {
+      e.error(stackTrace: s);
+      rethrow;
+    }
   }
 
   Future<bool> setVerified(String scope) async {
-    await _humanId.detect_batch_end(
-      scope,
-      privateKey.address,
-      credentials: privateKey,
-    );
-    return isVerified(scope);
+    try {
+      await _humanId.detect_batch_end(
+        scope,
+        privateKey.address,
+        credentials: privateKey,
+      );
+      return isVerified(scope);
+    } catch (e, s) {
+      e.error(stackTrace: s);
+      rethrow;
+    }
   }
 }

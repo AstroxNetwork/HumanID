@@ -9,14 +9,19 @@ String get astroxScope {
     scheme: "astrox",
     host: "human",
     queryParameters: {
-      "address": HumanIDService().privateKey.address.toString(),
+      "address": HumanIDService.privateKey.address.toString(),
       "host": "astrox.me"
     },
   ).toString();
 }
 
+final networkProvider = StateProvider((ref) {
+  return EthNetwork.selected;
+});
+
 final isVerifiedProvider = FutureProvider<bool>((ref) async {
-  final service = HumanIDService();
+  final network = ref.watch(networkProvider);
+  final service = HumanIDService(network);
   final list = await Future.wait([
     service.isVerified(astroxScope.toString()),
     Future.delayed(const Duration(milliseconds: 1200)),
@@ -40,6 +45,8 @@ Widget _home(BuildContext context) {
           child: Row(
             children: const [
               SettingsButton(),
+              spacer,
+              Network(),
               spacer,
               ScanButton(),
             ],
@@ -75,6 +82,120 @@ Widget _home(BuildContext context) {
         Ver(72.0 + Screen.navBarHeight),
       ],
     ),
+  );
+}
+
+@cwidget
+Widget _network(BuildContext context, WidgetRef ref) {
+  final selected = ref.watch(networkProvider);
+  return Material(
+    color: context.theme.cardColor,
+    borderRadius: BorderRadius.circular(16.0),
+    clipBehavior: Clip.antiAlias,
+    child: InkWell(
+      onTap: () {
+        showSelectedNetwork(context, ref);
+      },
+      child: SizedBox(
+        width: 180.0,
+        height: 40.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              selected.name,
+              style: const TextStyle(
+                fontFamily: FontFamily.gotham,
+                fontWeight: FontWeight.w700,
+                fontSize: 14.0,
+              ),
+            ),
+            Transform.translate(
+              offset: const Offset(8.0, 0),
+              child: const Icon(
+                Icons.arrow_drop_down_rounded,
+                size: 28.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+void showSelectedNetwork(BuildContext context, WidgetRef ref) {
+  showCupertinoModalBottomSheet(
+    context: context,
+    topRadius: const Radius.circular(24.0),
+    builder: (context) {
+      return Material(
+        child: Container(
+          height: Screen.screenHeight * 2 / 3,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24.0,
+            vertical: 24.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Select Chain",
+                style: TextStyle(
+                  fontFamily: FontFamily.gotham,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const Ver(28.0),
+              ...List.generate(EthNetwork.networks.length, (index) {
+                final network = EthNetwork.networks[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Material(
+                    color: context.theme.backgroundColor,
+                    borderRadius: BorderRadius.circular(16.0),
+                    child: InkWell(
+                      onTap: () {
+                        EthNetwork.selected = network;
+                        ref.read(networkProvider.notifier).state = network;
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 12.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                network.name,
+                                style: const TextStyle(
+                                  fontFamily: FontFamily.gotham,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            if (EthNetwork.selected == network)
+                              Icon(
+                                Icons.check_circle_rounded,
+                                color: context.theme.primaryColor,
+                                size: 24.0,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }
 
