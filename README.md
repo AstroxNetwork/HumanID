@@ -1,3 +1,5 @@
 # HumanID
 
-DEMO: https://ggskh-xiaaa-aaaaj-aaeea-cai.raw.ic0.app/
+![avatar]("./design/cover.png")
+
+DEMO: http://eth.thehuman.id
