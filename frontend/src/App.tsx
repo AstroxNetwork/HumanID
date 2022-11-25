@@ -35,6 +35,12 @@ function App() {
     abi: popIdl.abi,
     functionName: 'get_token',
     args: [scope, address!],
+    onSuccess: (data) => {
+      const verified =
+      (data as any)?.user === address &&
+      (data as any)?.scope === scope
+      setVerified(verified)
+    }
   })
   console.log('contractAddress',contractAddress)
   console.log('data', data)
@@ -95,8 +101,7 @@ function App() {
     console.log(typeof (data as any)?.created_at)
     const verified =
       (data as any)?.user === address &&
-      (data as any)?.scope === scope &&
-      typeof (data as any)?.created_at !== 'object'
+      (data as any)?.scope === scope
     return verified
   }
 
