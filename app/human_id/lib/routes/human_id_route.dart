@@ -85,8 +85,8 @@ FFRouteSettings getRouteSettings({
           xFile: asT<XFile>(
             safeArguments['xFile'],
           )!,
-          barcodes: asT<List<Barcode>>(
-            safeArguments['barcodes'],
+          barcode: asT<Barcode>(
+            safeArguments['barcode'],
           )!,
         ),
       );

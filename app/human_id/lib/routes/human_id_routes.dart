@@ -69,7 +69,7 @@ class Routes {
   ///
   /// [constructors] :
   ///
-  /// AnalyzingQR : [Key? key, XFile(required) xFile, List<Barcode>(required) barcodes]
+  /// AnalyzingQR : [Key? key, XFile(required) xFile, Barcode(required) barcode]
   static const _ScanFile scanFile = _ScanFile();
 
   /// '/splash'
@@ -176,12 +176,12 @@ class _ScanFile {
   Map<String, dynamic> d({
     Key? key,
     required XFile xFile,
-    required List<Barcode> barcodes,
+    required Barcode barcode,
   }) =>
       <String, dynamic>{
         'key': key,
         'xFile': xFile,
-        'barcodes': barcodes,
+        'barcode': barcode,
       };
 
   @override

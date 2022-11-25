@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
+import 'package:human_id/exports.dart';
 @FFArgumentImport()
 import 'package:image_picker/image_picker.dart';
 @FFArgumentImport()
 import 'package:mlkit_scan_plugin/mlkit_scan_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:human_id/exports.dart';
+
+import 'home.dart';
 
 @FFRoute(name: '/scan', argumentImports: ["import '../ui/pages/scan.dart';"])
 class QRScan extends StatefulWidget {
@@ -259,9 +262,21 @@ class QRScanState extends LifecycleState<QRScan>
                       [BarcodeFormat.QR_CODE],
                     );
                     if (list.isEmpty) {
-                      showToast(
-                        context.l10n.invalidQrCodePromptText,
-                      );
+                      showToast(context.l10n.invalidQrCodePromptText);
+                      return;
+                    }
+                    final code = list.firstWhereOrNull((e) {
+                      final uri = Uri.tryParse(e.value);
+                      if (uri == null) {
+                        return false;
+                      }
+                      if (uri.scheme == "astrox" && uri.host == 'human') {
+                        return true;
+                      }
+                      return false;
+                    });
+                    if (code == null) {
+                      showToast(context.l10n.qrCodeErrorInvalid);
                       return;
                     }
                     if (mounted) {
@@ -270,7 +285,7 @@ class QRScanState extends LifecycleState<QRScan>
                         Routes.scanFile.name,
                         arguments: Routes.scanFile.d(
                           xFile: xFile,
-                          barcodes: list,
+                          barcode: code,
                         ),
                       );
                     }
@@ -309,10 +324,10 @@ class AnalyzingQR extends StatelessWidget {
   const AnalyzingQR({
     Key? key,
     required this.xFile,
-    required this.barcodes,
+    required this.barcode,
   }) : super(key: key);
   final XFile xFile;
-  final List<Barcode> barcodes;
+  final Barcode barcode;
 
   @override
   Widget build(BuildContext context) {
@@ -369,7 +384,22 @@ class AnalyzingQR extends StatelessWidget {
     );
   }
 
-  Future<void> _handleBarcode(BuildContext context, Barcode code) async {}
+  Future<void> _handleBarcode(BuildContext context, Barcode code) async {
+    final toast = showLoading();
+    final actions = await [
+      HumanIDService().getActions(),
+      Future.delayed(const Duration(milliseconds: 800))
+    ].allSettled();
+    toast.dismiss(showAnim: true);
+    await Future.delayed(const Duration(milliseconds: 250));
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Routes.verifying.name,
+      (route) => route.settings.name == Routes.home.name,
+      arguments:
+          Routes.verifying.d(actions: actions.first.data, scope: code.value),
+    );
+  }
 
   Widget _buildBottom(BuildContext context) {
     return Container(
@@ -378,7 +408,7 @@ class AnalyzingQR extends StatelessWidget {
       decoration: bottomBarDecoration(context),
       child: ElevatedButton(
         onPressed: () {
-          _handleBarcode(context, barcodes.first);
+          _handleBarcode(context, barcode);
         },
         child: Text(context.l10n.confirmButton),
       ),
@@ -821,4 +851,30 @@ abstract class ScanHandler<T> implements ScanLifecycle {
   }
 
   FutureOr<ScanDat> acceptSuccess(QRScanState state, String text);
+}
+
+abstract class AstroXSchemeHandler<T> extends ScanHandler<T> {
+  @override
+  FutureOr<ScanDat> acceptSuccess(QRScanState state, String text) {
+    final uri = Uri.tryParse(text);
+    if (uri == null) {
+      return ScanDat.mismatched();
+    }
+    if (uri.scheme == 'astrox') {
+      return acceptAstroX(state, uri);
+    }
+    return ScanDat.mismatched();
+  }
+
+  FutureOr<ScanDat> acceptAstroX(QRScanState state, Uri uri);
+}
+
+class HumanHandler extends AstroXSchemeHandler<Uri> {
+  @override
+  FutureOr<ScanDat> acceptAstroX(QRScanState state, Uri uri) {
+    if (uri.host == 'human') {
+      return ScanDat.processed(uri);
+    }
+    return ScanDat.mismatched();
+  }
 }

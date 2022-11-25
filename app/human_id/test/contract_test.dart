@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:human_id/contracts/human_id.g.dart';
 import 'package:human_id/exports.dart';
+import 'package:human_id/ui/pages/home.dart';
 import 'package:web3dart/web3dart.dart' as web3;
 
 void main() {
@@ -18,7 +19,8 @@ void main() {
         "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");
     final ethPrivateKey = web3.EthPrivateKey.fromHex(
         "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a");
-    const scope = "astrox://human?astrox.me";
+    final scope = astroxScope;
+    astroxScope.debug();
     test("add_authorize_address", () async {
       final result = await humanId.add_authorize_address(
         ethPrivateKey.address,

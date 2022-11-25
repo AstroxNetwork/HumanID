@@ -1,8 +1,8 @@
-import 'package:permission_handler/permission_handler.dart';
 import 'package:human_id/exports.dart';
 import 'package:human_id/ui/fragments/settings.dart';
 import 'package:human_id/ui/pages/home.dart';
 import 'package:human_id/ui/pages/scan.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'buttons.g.dart';
 
@@ -75,13 +75,27 @@ Widget _scanButton(BuildContext context) {
         if (!isGranted) {
           return;
         }
-        final ScanManager manager = ScanManager({});
+        final ScanManager manager = ScanManager({HumanHandler()});
         final qr = await Navigator.pushNamed(
           context,
           Routes.scan.name,
           arguments: Routes.scan.d(manager: manager),
         );
-        if (qr is QR) {}
+        if (qr is QR) {
+          final toast = showLoading();
+          final actions = await [
+            HumanIDService().getActions(),
+            Future.delayed(const Duration(milliseconds: 800))
+          ].allSettled();
+          toast.dismiss(showAnim: true);
+          await Future.delayed(const Duration(milliseconds: 250));
+          Navigator.pushNamed(
+            context,
+            Routes.verifying.name,
+            arguments: Routes.verifying
+                .d(actions: actions.first.data, scope: qr.value.payload.toString()),
+          );
+        }
       },
       child: SizedBox(
         width: 50.0,
