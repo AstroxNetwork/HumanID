@@ -66,10 +66,9 @@ class HumanIDService {
 
   Future<bool> isVerified(String scope) async {
     try {
-      final result = await _humanId.get_token(
-        scope,
-        privateKey.address,
-      );
+      final address = web3.EthereumAddress.fromHex(
+          Uri.parse(scope).queryParameters['address'] as String);
+      final result = await _humanId.get_token(scope, address);
       final list = (result as List).cast<String>();
       return list[1].isNotBlank;
     } catch (e, s) {
@@ -93,9 +92,12 @@ class HumanIDService {
 
   Future<bool> setVerified(String scope) async {
     try {
+      scope.debug();
+      final address = web3.EthereumAddress.fromHex(
+          Uri.parse(scope).queryParameters['address'] as String);
       await _humanId.detect_batch_end(
         scope,
-        privateKey.address,
+        address,
         credentials: privateKey,
       );
       return isVerified(scope);

@@ -59,6 +59,10 @@ Widget _verifying(
                 actions: actions,
                 scope: scope,
               ),
+              Assets.lottie.scan.lottie(
+                width: 240.0,
+                height: 320.0,
+              ),
             ],
           ),
         ),
@@ -82,7 +86,6 @@ Widget _mask(
       Future.delayed(const Duration(milliseconds: 800), () {
         final action = actions.removeAt(0);
         liveDetection.setAction(action.name);
-        "new action: ${action.name}".debug();
       });
     } else {
       final service = HumanIDService();

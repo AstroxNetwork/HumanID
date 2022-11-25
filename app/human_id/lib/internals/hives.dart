@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:human_id/internals/extensions.dart';
+import 'package:human_id/l10n/localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:human_id/l10n/localizations.dart';
+import 'package:web3dart/credentials.dart';
 
 class Hives {
   const Hives._();
@@ -57,7 +60,10 @@ class Settings {
     this._themeMode,
     this._locale,
     this._showGuide,
+    this._pk,
   );
+
+  static late EthPrivateKey pk;
 
   static Future<Settings> _new(CollectionBox<String> box) async {
     final mode = await box.get("theme-mode");
@@ -77,11 +83,19 @@ class Settings {
       locale = Locale(lang);
     }
     String? showGuide = await box.get("show-guide");
+    String? pk = await box.get("pk");
+    if (pk.isNullOrBlank) {
+      final ethPrivateKey = EthPrivateKey.createRandom(Random.secure());
+      pk = ethPrivateKey.privateKeyInt.toString();
+      await box.put("pk", pk);
+    }
+    Settings.pk = EthPrivateKey.fromInt(BigInt.parse(pk!));
     return Settings._(
       box,
       themeMode,
       locale,
       showGuide == null,
+      pk!,
     );
   }
 
@@ -89,6 +103,7 @@ class Settings {
   ThemeMode _themeMode;
   Locale _locale;
   bool _showGuide;
+  final String _pk;
 
   ThemeMode get themeMode => _themeMode;
 

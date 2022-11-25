@@ -9,7 +9,7 @@ String get astroxScope {
     scheme: "astrox",
     host: "human",
     queryParameters: {
-      "address": HumanIDService.privateKey.address.toString(),
+      "address": Settings.pk.address.toString(),
       "host": "astrox.me"
     },
   ).toString();

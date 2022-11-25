@@ -69,6 +69,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/lottie/
     - assets/icons/
     - assets/icons/guide/
     - assets/icons/about/
@@ -89,5 +90,6 @@ flutter_gen:
   line_length: 80
   integrations:
     flutter_svg: true
+    lottie: true
 
 
