@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>扫码</title>
+    <g id="1.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="PoP内点击活动入口" transform="translate(-309.000000, -68.000000)" fill="#B5FF26" fill-rule="nonzero">
+            <path d="M311.8,70.8 L311.8,75 L309,75 L309,68 L316,68 L316,70.8 L311.8,70.8 Z M311.8,87.2 L316,87.2 L316,90 L309,90 L309,83 L311.8,83 L311.8,87.2 L311.8,87.2 Z M328.2,70.8 L324,70.8 L324,68 L331,68 L331,75 L328.2,75 L328.2,70.8 Z M328.2,87.2 L328.2,83 L331,83 L331,90 L324,90 L324,87.2 L328.2,87.2 L328.2,87.2 Z M309,77.5652174 L331,77.5652174 L331,80.4347826 L309,80.4347826 L309,77.5652174 Z" id="扫码"></path>
+        </g>
+    </g>
+</svg>

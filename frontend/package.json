@@ -1,0 +1,32 @@
+{
+  "name": "pop-eth",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.8.0",
+    "classnames": "^2.3.2",
+    "ethers": "^5.7.2",
+    "less": "^4.1.3",
+    "lodash": "^4.17.21",
+    "qrcode.react": "^3.0.2",
+    "querystring": "^0.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wagmi": "^0.8.6"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.189",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
+  }
+}

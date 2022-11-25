@@ -1,0 +1,7 @@
+arb-dir: lib/l10n
+output-class: HumanIDLocalizations
+output-dir: lib/l10n
+output-localization-file: localizations.dart
+template-arb-file: app_en.arb
+synthetic-package: false
+untranslated-messages-file: lib/l10n/untranslated.json
