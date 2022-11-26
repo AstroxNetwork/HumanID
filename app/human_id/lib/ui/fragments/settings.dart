@@ -20,7 +20,7 @@ Widget _settingsPanel(BuildContext context) {
     slivers: [
       SimpleSliverPinnedHeader(
         maxExtent: 160.0,
-        minExtent: 88.0,
+        minExtent: 66.0,
         custom: true,
         builder: (context, maxOffset, offsetRatio) {
           return Container(
@@ -47,10 +47,10 @@ Widget _settingsPanel(BuildContext context) {
                     ),
                   ),
                 ),
-                const PositionedDirectional(
-                  top: 30.0,
+                PositionedDirectional(
+                  top: 30.0 * (1 - offsetRatio) + 8.0,
                   start: 0.0,
-                  child: BackButton(),
+                  child: const BackButton(),
                 ),
               ],
             ),
