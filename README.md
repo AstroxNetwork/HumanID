@@ -8,6 +8,8 @@ http://eth.thehuman.id
 
 ## Slide
 
+[Download PDF](https://github.com/AstroxNetwork/HumanID/blob/main/design/HumanID.pdf)
+
 ## Flow
 
 ![avatar](./design/flow.png)
