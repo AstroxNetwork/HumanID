@@ -107,7 +107,7 @@ function App() {
         <h1>HumanID example</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <ConnectButton />
-          <a href="">
+          <a href="https://astroxmehk.s3.ap-east-1.amazonaws.com/humanId-hackathon-v1.apk">
             <button>Download HumanID App</button>
           </a>
         </div>
