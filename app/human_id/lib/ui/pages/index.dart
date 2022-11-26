@@ -57,10 +57,8 @@ Widget _humanID(WidgetRef ref) {
 Widget _splash(BuildContext context, WidgetRef ref) {
   useDelay(() {
     final showGuide = ref.read(Hives.settingsProvider).showGuide;
-    Navigator.pushNamed(
-      context,
-      showGuide ? Routes.guide.name : Routes.home.name,
-    );
+    Navigator.pushNamedAndRemoveUntil(context,
+        showGuide ? Routes.guide.name : Routes.home.name, (route) => true);
   }, const Duration(milliseconds: 1500));
   return Scaffold(
     body: Padding(

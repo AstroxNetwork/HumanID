@@ -130,6 +130,7 @@ void showSelectedNetwork(BuildContext context, WidgetRef ref) {
     topRadius: const Radius.circular(24.0),
     builder: (context) {
       return Material(
+        color: context.theme.cardColor,
         child: Container(
           height: Screen.screenHeight * 2 / 3,
           padding: const EdgeInsets.symmetric(

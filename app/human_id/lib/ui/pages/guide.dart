@@ -104,7 +104,8 @@ Widget guide(BuildContext context, WidgetRef ref) {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(Hives.settingsProvider).showGuide = false;
-                Navigator.pushNamed(context, Routes.home.name);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.home.name, (route) => true);
               },
               child: const Text("Enter"),
             ),
