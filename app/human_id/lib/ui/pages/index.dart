@@ -58,7 +58,7 @@ Widget _splash(BuildContext context, WidgetRef ref) {
   useDelay(() {
     final showGuide = ref.read(Hives.settingsProvider).showGuide;
     Navigator.pushNamedAndRemoveUntil(context,
-        showGuide ? Routes.guide.name : Routes.home.name, (route) => true);
+        showGuide ? Routes.guide.name : Routes.home.name, (route) => false);
   }, const Duration(milliseconds: 1500));
   return Scaffold(
     body: Padding(

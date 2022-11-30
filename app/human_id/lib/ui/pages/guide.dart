@@ -105,7 +105,7 @@ Widget guide(BuildContext context, WidgetRef ref) {
               onPressed: () {
                 ref.read(Hives.settingsProvider).showGuide = false;
                 Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.home.name, (route) => true);
+                    context, Routes.home.name, (route) => false);
               },
               child: const Text("Enter"),
             ),
