@@ -1,4 +1,4 @@
-import { alchemyRpcUrls, Chain, etherscanBlockExplorers, infuraRpcUrls } from "wagmi";
+import {  Chain } from "wagmi";
 
 export const scrollChain: Chain = {
   id: 534354,
@@ -6,22 +6,21 @@ export const scrollChain: Chain = {
   network: 'scrollL2Testnet',
   nativeCurrency: { name: 'Scroll L2 Ether', symbol: 'TSETH', decimals: 18 },
   rpcUrls: {
-    alchemy: alchemyRpcUrls.goerli,
-    default: 'https://prealpha.scroll.io/l2',
-    infura: infuraRpcUrls.goerli,
-    public: 'https://prealpha.scroll.io/l2',
+    // alchemy: alchemyRpcUrls.goerli,
+    // infura: infuraRpcUrls.goerli,
+    default: {http: ['https://prealpha.scroll.io/l2']},
   },
-  blockExplorers: {
-    etherscan: etherscanBlockExplorers.goerli,
-    default: etherscanBlockExplorers.goerli,
-  },
-  ens: {
-    address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
-  },
-  multicall: {
-    address: '0x699CE1B15A07d3cda509CF25b836fE66AACc6590',
-    blockCreated: 6507670,
-  },
+  // blockExplorers: {
+  //   etherscan: ,
+  //   default: etherscanBlockExplorers.goerli,
+  // },
+  // ens: {
+  //   address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+  // },
+  // multicall: {
+  //   address: '0x699CE1B15A07d3cda509CF25b836fE66AACc6590',
+  //   blockCreated: 6507670,
+  // },
   testnet: true,
 }
 
@@ -32,22 +31,19 @@ export const polygonTestChain: Chain = {
   network: 'MumbaiTestnet',
   nativeCurrency: { name: 'Mumbai Testnet', symbol: 'MATIC', decimals: 18 },
   rpcUrls: {
-    alchemy: alchemyRpcUrls.goerli,
-    default: 'https://rpc-mumbai.maticvigil.com',
-    infura: infuraRpcUrls.goerli,
-    public: 'https://rpc-mumbai.maticvigil.com',
+    default: {http: ['https://rpc-mumbai.maticvigil.com']},
   },
-  blockExplorers: {
-    etherscan: etherscanBlockExplorers.polygon,
-    default: etherscanBlockExplorers.polygon,
-  },
-  ens: {
-    address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
-  },
-  multicall: {
-    address: '0x699CE1B15A07d3cda509CF25b836fE66AACc6590',
-    blockCreated: 6507670,
-  },
+  // blockExplorers: {
+  //   etherscan: etherscanBlockExplorers.polygon,
+  //   default: etherscanBlockExplorers.polygon,
+  // },
+  // ens: {
+  //   address: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+  // },
+  // multicall: {
+  //   address: '0x699CE1B15A07d3cda509CF25b836fE66AACc6590',
+  //   blockCreated: 6507670,
+  // },
   testnet: true,
 }
 

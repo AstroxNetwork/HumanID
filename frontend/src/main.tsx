@@ -5,7 +5,8 @@ import { RainbowKitProvider, getDefaultWallets, connectorsForWallets,  } from '@
 import {
   metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
+import * as chain from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import App from './App'
 import './index.css'
@@ -13,15 +14,15 @@ import { polygonTestChain, scrollChain } from './contracts/chain'
 
 const chains =
   import.meta.env.MODE === 'development'
-    ? [chain.localhost]
-    : [scrollChain, polygonTestChain]
+    ? [chain.localhost, scrollChain]
+    : [scrollChain, polygonTestChain, chain.polygon]
 const { provider, webSocketProvider } = configureChains(chains, [
   jsonRpcProvider({
     rpc: (chain) => {
       console.log(chain)
       return {
         http:
-        chain.rpcUrls.default
+        chain.rpcUrls.default.http[0]
       }
     },
   }),
@@ -30,7 +31,7 @@ const { provider, webSocketProvider } = configureChains(chains, [
 //   appName: 'Challenge',
 //   chains,
 // })
-
+console.log('provider======', provider)
 const connectors = connectorsForWallets([
   {
     groupName: 'Recommended',

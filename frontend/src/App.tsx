@@ -4,7 +4,7 @@ import { useAccount, useContractRead, useNetwork } from 'wagmi'
 import qs from 'querystring'
 import { QRCodeSVG } from 'qrcode.react'
 import './App.less'
-import { getContract, readContract } from '@wagmi/core'
+import { getContract, getProvider, readContract, getClient, getNetwork } from '@wagmi/core'
 import { Modal, Toast } from './component'
 import { ModalShowHandler } from './component/components/modal/show'
 import popIdl from './contracts/POP.json'
@@ -125,6 +125,12 @@ function App() {
             )}
           </div>
         ) : null}
+        <button onClick={() => {
+          console.log('provider====', getProvider())
+          console.log('client====', getClient())
+          console.log('getNetwork====', getNetwork())
+         
+        }}>test</button>
       </div>
       <p className="read-the-docs">AstroX© 2022</p>
     </>
