@@ -8,13 +8,14 @@ import {
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import * as chain from 'wagmi/chains';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
-import App from './App'
+import App from './page/HumanID'
 import './index.css'
 import { polygonTestChain, scrollChain } from './contracts/chain'
+import { Router } from './routes';
 
 const chains =
   import.meta.env.MODE === 'development'
-    ? [chain.localhost, scrollChain]
+    ? [polygonTestChain, chain.localhost, scrollChain]
     : [scrollChain, polygonTestChain, chain.polygon]
 const { provider, webSocketProvider } = configureChains(chains, [
   jsonRpcProvider({
@@ -53,7 +54,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <div className="container">
-          <App />
+          <Router />
         </div>
       </RainbowKitProvider>
     </WagmiConfig>

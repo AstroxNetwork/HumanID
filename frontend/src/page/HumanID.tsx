@@ -3,16 +3,17 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount, useContractRead, useNetwork } from 'wagmi'
 import qs from 'querystring'
 import { QRCodeSVG } from 'qrcode.react'
-import './App.less'
+import '../App.less'
 import { getContract, getProvider, readContract, getClient, getNetwork } from '@wagmi/core'
-import { Modal, Toast } from './component'
-import { ModalShowHandler } from './component/components/modal/show'
-import popIdl from './contracts/POP.json'
-import { contractsAddress } from './contracts/chain'
+import { Modal, Toast } from '../component'
+import { ModalShowHandler } from '../component/components/modal/show'
+import popIdl from '../contracts/POP.json'
+import { contractsAddress } from '../contracts/chain'
+import { useNavigate } from 'react-router-dom'
 
 let verifyTimer: string | number | NodeJS.Timeout | undefined
 
-function App() {
+function HumanID() {
   const [verified, setVerified] = useState(false)
   const { isConnected, connector: activeConnector, address } = useAccount()
   const { chain } = useNetwork()
@@ -22,6 +23,7 @@ function App() {
     address,
     host: window.location.hostname,
   }
+  const navigation = useNavigate()
   console.log(chain)
   const contractAddress =
     chain?.id === 80001
@@ -129,7 +131,7 @@ function App() {
           console.log('provider====', getProvider())
           console.log('client====', getClient())
           console.log('getNetwork====', getNetwork())
-         
+          navigation('/assets')
         }}>test</button>
       </div>
       <p className="read-the-docs">AstroX© 2022</p>
@@ -137,4 +139,4 @@ function App() {
   )
 }
 
-export default App
+export default HumanID
