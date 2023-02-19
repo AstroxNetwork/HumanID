@@ -14,7 +14,8 @@ interface nftStatus {
 
 const AssetsPage: React.FC = () => {
   const { isConnected, connector: activeConnector, address } = useAccount()
-  const ids = getTokenIds(1, 4)
+  const minSize = 50;
+  const ids = getTokenIds(1, minSize)
   const inputRef = useRef<any>()
   // const [nftsId, setNftsId] = useState<number[]>([])
   const nftsIdRef = useRef<number[]>([])
@@ -31,20 +32,30 @@ const AssetsPage: React.FC = () => {
   const getAssets = async () => {
     console.log(thePitIdl.abi)
     console.log(getTokenIds(1, 50))
-    const result = await Promise.all(ids.map( async (id) => {
-      const data =  await readContract({
-        address: '0xF8c761ccB8459cA802a30B408ea53F07Cb4B2075',
-        abi: thePitIdl.abi,
-        functionName: 'balanceOf',
-        args: [ address!, id],
-      })
-      return {
-        id,
-        value: data,
-      }
-    }))
+    // const result = await Promise.all(ids.map( async (id) => {
+    //   const data =  await readContract({
+    //     address: '0xF8c761ccB8459cA802a30B408ea53F07Cb4B2075',
+    //     abi: thePitIdl.abi,
+    //     functionName: 'balanceOf',
+    //     args: [ address!, id],
+    //   })
+    //   return {
+    //     id,
+    //     value: data,
+    //   }
+    // }))
+    // console.log(result)
+    const result =  await readContract({
+      address: '0xF8c761ccB8459cA802a30B408ea53F07Cb4B2075',
+      abi: thePitIdl.abi,
+      functionName: "balanceOfBatch",
+      args: [ new Array(minSize).fill(address), ids],
+    })
     console.log(result)
-    const hasNft = result.filter(o => (o.value as BigNumber).toString() === '1');
+    const hasNft = (result as BigNumber[]).map((o, index) => ({
+      id: index + 1,
+      value: o,
+    })).filter(o => (o.value as BigNumber).toString() === '1');
     nftsIdRef.current = hasNft.map(o => o.id)
     setNftsFormat(nftsIdRef.current.map(id => ({
       id,
