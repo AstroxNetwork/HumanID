@@ -1,4 +1,5 @@
 import {
+  getClient,
   prepareSendTransaction,
   prepareWriteContract,
   readContract,
@@ -21,7 +22,7 @@ interface nftStatus {
 
 const AssetsPage: React.FC = () => {
   const { isConnected, connector: activeConnector, address } = useAccount()
-  const minSize = 50
+  const minSize = 1000
   const ids = getTokenIds(1, minSize)
   const inputRef = useRef<any>()
   // const [nftsId, setNftsId] = useState<number[]>([])
@@ -39,9 +40,10 @@ const AssetsPage: React.FC = () => {
   console.log('nftsFormat', nftsFormat)
   const getAssets = async () => {
     console.log(thePitIdl.abi)
+    // getClient()
     console.log(getTokenIds(1, 50))
     const result = await readContract({
-      address: '0xF8c761ccB8459cA802a30B408ea53F07Cb4B2075',
+      address: '0x83a80059cb677e366699c564f948183f323d61c4',
       abi: thePitIdl.abi,
       functionName: 'balanceOfBatch',
       args: [new Array(minSize).fill(address), ids],
@@ -72,7 +74,7 @@ const AssetsPage: React.FC = () => {
       if (nft.address && nft.id) {
         try {
           const config = await prepareWriteContract({
-            address: '0xF8c761ccB8459cA802a30B408ea53F07Cb4B2075',
+            address: '0x83a80059cb677e366699c564f948183f323d61c4',
             abi: thePitIdl.abi,
             functionName: 'safeTransferFrom',
             // args: [ from, to, id, amout, data],
@@ -103,28 +105,32 @@ const AssetsPage: React.FC = () => {
 
   const transferToken = async () => {
     for (let i = 0; i < nftsFormat.length; i++) {
-      setSending(true)
-      let newNfts = [...nftsFormat]
-      try {
-        const config = await prepareSendTransaction({
-          request: {
-            to: nftsFormat[i].address,
-            value: ethers.utils.parseUnits(amount, 18),
-          },
-        })
-        const { hash } = await sendTransaction({
-          ...config,
-        })
-        setSending(false)
-
-        newNfts[i].tokenStatus = 1
-        console.log('hash', hash)
-        setNftsFormat(newNfts)
-      } catch (err: any) {
-        newNfts[i].err = JSON.stringify(err.cause)
-        setSending(false)
-        setNftsFormat(newNfts)
+      const nft = nftsFormat[i]
+      if(nft.address) {
+        setSending(true)
+        let newNfts = [...nftsFormat]
+        try {
+          const config = await prepareSendTransaction({
+            request: {
+              to: nftsFormat[i].address,
+              value: ethers.utils.parseUnits(amount, 18),
+            },
+          })
+          const { hash } = await sendTransaction({
+            ...config,
+          })
+          setSending(false)
+  
+          newNfts[i].tokenStatus = 1
+          console.log('hash', hash)
+          setNftsFormat(newNfts)
+        } catch (err: any) {
+          newNfts[i].err = JSON.stringify(err.cause)
+          setSending(false)
+          setNftsFormat(newNfts)
+        }
       }
+     
     }
   }
 
@@ -137,7 +143,7 @@ const AssetsPage: React.FC = () => {
     reader.onload = function fileReadCompleted() {
       // 当读取完成时，内容只在`reader.result`中
       console.log('result======', reader.result)
-      const address = (reader.result as string).split('\n')
+      const address = (reader.result as string).replace(/\r/g, '').split('\n')
       setAddressList(address)
       console.log(nftsIdRef.current)
       setNftsFormat(
